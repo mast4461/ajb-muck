@@ -3,7 +3,7 @@ td {
 	padding: 0.3em;
 }
 
-#footnote {
+.footnote {
 	margin-top: 1em;
 	font-style: italic;
 	color: lightgrey;
