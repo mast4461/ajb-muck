@@ -32,13 +32,33 @@ function formatDuration(millis) {
 	return hours+':'+minutes+':'+seconds;
 }
 
+function dateRange(dateString1, dateString2) {
+	// Quite inaccurate, but should be good enough for this scenario...
+	const date1 = new Date(dateString1);
+	const date2 = new Date(dateString2);
+	const dayCount = dayDiff(date1, date2);
+
+	const dates = [date1];
+
+	for(let i = 1; i < dayCount; i++) {
+		const date = new Date(date1.getTime() + i * 24 * 3600 * 1000);
+		dates.push(date);
+	}
+
+	dates.push(date2);
+
+	return dates;
+}
+
 let elDaysToLeave = gebid('days-to-leave');
 let elHoursToLeave = gebid('hours-to-leave');
 let elFieldDaysToLeave = gebid('field-days-to-leave');
+let elServiceDaysToLeave = gebid('service-days-to-leave');
+
 let elDaysToMuck = gebid('days-to-muck');
 let elHoursToMuck = gebid('hours-to-muck');
 let elFieldDaysToMuck = gebid('field-days-to-muck');
-
+let elServiceDaysToMuck = gebid('service-days-to-muck');
 
 let muckTime = new Date('2019-05-03 13:00');
 
@@ -82,6 +102,20 @@ let fieldDays = [
 	'2019-03-24',
 ].map(s => new Date(s));
 
+const serviceDays = [
+	...dateRange('2018-11-26', '2018-12-05'),
+	...dateRange('2018-12-10', '2018-12-19'),
+	...dateRange('2019-01-07', '2019-01-17'),
+	...dateRange('2019-01-21', '2019-01-30'),
+	...dateRange('2019-02-04', '2019-02-13'),
+	...dateRange('2019-02-18', '2019-02-22'),
+	...dateRange('2019-02-25', '2019-03-01'),
+	...dateRange('2019-03-04', '2019-03-08'),
+	...dateRange('2019-03-15', '2019-03-27'),
+	...dateRange('2019-04-04', '2019-04-17'),
+	...dateRange('2019-04-24', '2019-05-03'),
+];
+
 
 function tick() {
 	const now = new Date();
@@ -92,17 +126,27 @@ function tick() {
 		d - now > 0 && d - nextLeaveStart < 0
 	).length
 
+	const serviceDaysToLeave = serviceDays.filter(d =>
+		d - now > 0 && d - nextLeaveStart < 0
+	).length
+
 	const fieldDaysToMuck = fieldDays.filter(d =>
+		d - now > 0 && d - muckTime < 0
+	).length
+
+	const serviceDaysToMuck = serviceDays.filter(d =>
 		d - now > 0 && d - muckTime < 0
 	).length
 
 	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
 	elHoursToMuck.innerText = hourDiffString(now, muckTime);
 	elFieldDaysToMuck.innerText = fieldDaysToMuck;
+	elServiceDaysToMuck.innerText = serviceDaysToMuck;
 
 	elDaysToLeave.innerText = Math.ceil(dayDiff(now, nextLeaveStart))
 	elHoursToLeave.innerText = hourDiffString(now, nextLeaveStart);
 	elFieldDaysToLeave.innerText = fieldDaysToLeave;
+	elServiceDaysToLeave.innerText = serviceDaysToLeave;
 
 	setTimeout(tick, millisToNextSecond());
 }
