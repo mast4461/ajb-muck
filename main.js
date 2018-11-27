@@ -3,7 +3,6 @@ function gebid(id) {
 }
 
 function round(number, decimalsCount) {
-	// return number;
 	const f = Math.pow(10, decimalsCount);
 	return Math.round(number*f)/f;
 }
