@@ -7,16 +7,29 @@ function round(number, decimalsCount) {
 	return Math.round(number*f)/f;
 }
 
-function hourDiff(date1, date2) {
-	return (date2 - date1)/3600000;
+function hourDiffString(date1, date2) {
+	return formatDuration(date2 - date1);
 }
 
 function dayDiff(date1, date2) {
-	return (date2 - date1)/(3600000*24);
+	return (date2 - date1) / (3600000 * 24);
 }
 
 function millisToNextSecond() {
-  return 1000 - Date.now() % 1000;
+	return 1000 - Date.now() % 1000;
+}
+
+function formatDuration(millis) {
+	// From https://stackoverflow.com/a/6313008 with modifications
+	var sec_num = millis / 1000;
+	var hours   = Math.floor(sec_num / 3600);
+	var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+	var seconds = Math.round(sec_num - (hours * 3600) - (minutes * 60));
+
+	if (hours   < 10) {hours   = "0"+hours;}
+	if (minutes < 10) {minutes = "0"+minutes;}
+	if (seconds < 10) {seconds = "0"+seconds;}
+	return hours+':'+minutes+':'+seconds;
 }
 
 let elDaysToLeave = gebid('days-to-leave');
@@ -84,11 +97,11 @@ function tick() {
 	).length
 
 	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
-	elHoursToMuck.innerText = round(hourDiff(now, muckTime), 4);
+	elHoursToMuck.innerText = hourDiffString(now, muckTime);
 	elFieldDaysToMuck.innerText = fieldDaysToMuck;
 
 	elDaysToLeave.innerText = Math.ceil(dayDiff(now, nextLeaveStart))
-	elHoursToLeave.innerText = round(hourDiff(now, nextLeaveStart), 4);
+	elHoursToLeave.innerText = hourDiffString(now, nextLeaveStart);
 	elFieldDaysToLeave.innerText = fieldDaysToLeave;
 
 	setTimeout(tick, millisToNextSecond());
