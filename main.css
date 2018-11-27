@@ -1,0 +1,10 @@
+td {
+	background-color: lightgrey;
+	padding: 0.3em;
+}
+
+#footnote {
+	margin-top: 1em;
+	font-style: italic;
+	color: lightgrey;
+}
