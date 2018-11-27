@@ -16,6 +16,10 @@ function dayDiff(date1, date2) {
 	return (date2 - date1)/(3600000*24);
 }
 
+function millisToNextSecond() {
+  return 1000 - Date.now() % 1000;
+}
+
 let elDaysToLeave = gebid('days-to-leave');
 let elHoursToLeave = gebid('hours-to-leave');
 let elFieldDaysToLeave = gebid('field-days-to-leave');
@@ -72,13 +76,13 @@ function tick() {
 
 	let nextLeaveStart = leaveStarts.find(d => d - now > 0);
 
-	const fieldDaysToLeave = fieldDays.filter(d => {
-		return d - now > 0 && d - nextLeaveStart < 0
-	}).length
+	const fieldDaysToLeave = fieldDays.filter(d =>
+		d - now > 0 && d - nextLeaveStart < 0
+	).length
 
-	const fieldDaysToMuck = fieldDays.filter(d => {
-		return d - now > 0 && d - muckTime < 0
-	}).length
+	const fieldDaysToMuck = fieldDays.filter(d =>
+		d - now > 0 && d - muckTime < 0
+	).length
 
 	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
 	elHoursToMuck.innerText = round(hourDiff(now, muckTime), 4);
@@ -87,6 +91,8 @@ function tick() {
 	elDaysToLeave.innerText = Math.ceil(dayDiff(now, nextLeaveStart))
 	elHoursToLeave.innerText = round(hourDiff(now, nextLeaveStart), 4);
 	elFieldDaysToLeave.innerText = fieldDaysToLeave;
+
+	setTimeout(tick, millisToNextSecond());
 }
 
-setInterval(tick, 500);
+tick();
