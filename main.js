@@ -50,6 +50,13 @@ function dateRange(dateString1, dateString2) {
 	return dates;
 }
 
+
+
+// Comparse two dates. Returns true if date1 is before date2.
+function isBefore(date1, date2) {
+  return date1 - date2 < 0;
+}
+
 let elDaysToLeave = gebid('days-to-leave');
 let elHoursToLeave = gebid('hours-to-leave');
 let elFieldDaysToLeave = gebid('field-days-to-leave');
@@ -120,22 +127,22 @@ const serviceDays = [
 function tick() {
 	const now = new Date();
 
-	let nextLeaveStart = leaveStarts.find(d => d - now > 0);
+	let nextLeaveStart = leaveStarts.find(d => isBefore(now, d));
 
 	const fieldDaysToLeave = fieldDays.filter(d =>
-		d - now > 0 && d - nextLeaveStart < 0
+		isBefore(now, d) && isBefore(d, nextLeaveStart)
 	).length
 
 	const serviceDaysToLeave = serviceDays.filter(d =>
-		d - now > 0 && d - nextLeaveStart < 0
+		isBefore(now, d) && isBefore(d, nextLeaveStart)
 	).length
 
 	const fieldDaysToMuck = fieldDays.filter(d =>
-		d - now > 0 && d - muckTime < 0
+		isBefore(now, d) && isBefore(d, muckTime)
 	).length
 
 	const serviceDaysToMuck = serviceDays.filter(d =>
-		d - now > 0 && d - muckTime < 0
+		isBefore(now, d) && isBefore(d, muckTime)
 	).length
 
 	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
