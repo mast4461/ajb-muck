@@ -145,15 +145,15 @@ function tick() {
 		isBefore(now, d) && isBefore(d, muckTime)
 	).length
 
-	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
-	elHoursToMuck.innerText = hourDiffString(now, muckTime);
-	elFieldDaysToMuck.innerText = fieldDaysToMuck;
-	elServiceDaysToMuck.innerText = serviceDaysToMuck;
-
 	elDaysToLeave.innerText = Math.ceil(dayDiff(now, nextLeaveStart))
 	elHoursToLeave.innerText = hourDiffString(now, nextLeaveStart);
 	elFieldDaysToLeave.innerText = fieldDaysToLeave;
 	elServiceDaysToLeave.innerText = serviceDaysToLeave;
+  
+	elDaysToMuck.innerText = Math.ceil(dayDiff(now, muckTime));
+	elHoursToMuck.innerText = hourDiffString(now, muckTime);
+	elFieldDaysToMuck.innerText = fieldDaysToMuck;
+	elServiceDaysToMuck.innerText = serviceDaysToMuck;
 
 	setTimeout(tick, millisToNextSecond());
 }
