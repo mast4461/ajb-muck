@@ -60,18 +60,18 @@ let elHoursToMuck = gebid('hours-to-muck');
 let elFieldDaysToMuck = gebid('field-days-to-muck');
 let elServiceDaysToMuck = gebid('service-days-to-muck');
 
-let muckTime = new Date('2019-05-03 13:00');
+let muckTime = new Date('2019-05-03T13:00');
 
 let leaveStarts = [
-	'2018-12-05 12:45',
-	'2018-12-20 12:45',
-	'2019-01-17 12:45',
-	'2019-01-30 12:45',
-	'2019-02-13 12:45',
-	'2019-02-28 12:45',
-	'2019-03-08 18:00',
-	'2019-03-27 18:00',
-	'2019-04-17 18:00',
+	'2018-12-05T12:45',
+	'2018-12-20T12:45',
+	'2019-01-17T12:45',
+	'2019-01-30T12:45',
+	'2019-02-13T12:45',
+	'2019-02-28T12:45',
+	'2019-03-08T18:00',
+	'2019-03-27T18:00',
+	'2019-04-17T18:00',
 ].map(s => new Date(s));
 
 let fieldDays = [
