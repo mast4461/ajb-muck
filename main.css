@@ -23,3 +23,7 @@ td {
 	font-style: italic;
 	color: #bbb;
 }
+
+a {
+  opacity: 0.6;
+}
