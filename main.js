@@ -50,9 +50,11 @@ function dateRange(dateString1, dateString2) {
 	return dates;
 }
 
+function getNow() {
+	return new Date();
+}
 
-
-// Comparse two dates. Returns true if date1 is before date2.
+// Compares two dates. Returns true if date1 is before date2.
 function isBefore(date1, date2) {
   return date1 - date2 < 0;
 }
@@ -69,6 +71,8 @@ let elServiceDaysToMuck = gebid('service-days-to-muck');
 
 let muckTime = new Date('2019-05-03T13:00');
 
+const now = getNow();
+
 let leaveStarts = [
 	'2018-12-05T12:45',
 	'2018-12-19T12:45',
@@ -79,7 +83,9 @@ let leaveStarts = [
 	'2019-03-08T18:00',
 	'2019-03-27T18:00',
 	'2019-04-17T18:00',
-].map(s => new Date(s));
+]
+	.map(s => new Date(s))
+	.filter(d => isBefore(now, d));
 
 let fieldDays = [
 	'2018-12-14',
@@ -107,7 +113,9 @@ let fieldDays = [
 	'2019-03-22',
 	'2019-03-23',
 	'2019-03-24',
-].map(s => new Date(s));
+]
+	.map(s => new Date(s))
+	.filter(d => isBefore(now, d));
 
 const serviceDays = [
 	...dateRange('2018-11-26', '2018-12-05'),
@@ -121,29 +129,30 @@ const serviceDays = [
 	...dateRange('2019-03-15', '2019-03-27'),
 	...dateRange('2019-04-04', '2019-04-17'),
 	...dateRange('2019-04-24', '2019-05-03'),
-];
+]
+	.filter(d => isBefore(now, d));
 
 
 function tick() {
-	const now = new Date();
+	const now = getNow();
 
 	let nextLeaveStart = leaveStarts.find(d => isBefore(now, d));
 
 	const fieldDaysToLeave = fieldDays.filter(d =>
 		isBefore(now, d) && isBefore(d, nextLeaveStart)
-	).length
+	).length;
 
 	const serviceDaysToLeave = serviceDays.filter(d =>
 		isBefore(now, d) && isBefore(d, nextLeaveStart)
-	).length
+	).length;
 
 	const fieldDaysToMuck = fieldDays.filter(d =>
 		isBefore(now, d) && isBefore(d, muckTime)
-	).length
+	).length;
 
 	const serviceDaysToMuck = serviceDays.filter(d =>
 		isBefore(now, d) && isBefore(d, muckTime)
-	).length
+	).length;
 
 	elDaysToLeave.innerText = Math.ceil(dayDiff(now, nextLeaveStart))
 	elHoursToLeave.innerText = hourDiffString(now, nextLeaveStart);
